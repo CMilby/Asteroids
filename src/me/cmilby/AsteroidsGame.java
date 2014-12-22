@@ -15,5 +15,7 @@ public class AsteroidsGame extends Game {
 	@Override
 	public void init() {
 		addEntity((new Entity()).addComponent(new ShipComponent()));
+	
+		addEntity((new Entity()).addComponent(new AsteroidComponent(2)));
 	}
 }

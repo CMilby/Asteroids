@@ -2,7 +2,7 @@ package me.cmilby;
 
 public class CoreGame {
 
-	public static boolean DEBUG = false;
+	public static final boolean DEBUG = true;
 	
 	private Game game;
 	

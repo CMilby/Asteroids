@@ -8,10 +8,15 @@ public class ShipComponent extends EntityComponent {
 	private Input input;
 	private Vector2f velocity;
 	
+	private boolean canShoot;
+	private float lastShot;
+	
 	public ShipComponent() {
 		super();
 		this.input = Input.getInstance();
 		this.velocity = new Vector2f();
+		this.canShoot = true;
+		this.lastShot = 0.0f;
 	}
 	
 	@Override
@@ -22,6 +27,7 @@ public class ShipComponent extends EntityComponent {
 	
 	@Override
 	public void handleInput(float delta) {
+		super.handleInput(delta);
 		if (input.isKeyDown(Input.KEY_W) || input.isKeyDown(Input.KEY_UP)) {
 			velocity.setX(velocity.getX() + (float) Math.sin(getTransform().getRotation()) * (delta / 4.0f));
 			velocity.setY(velocity.getY() - (float) Math.cos(getTransform().getRotation()) * (delta / 4.0f));
@@ -48,26 +54,42 @@ public class ShipComponent extends EntityComponent {
 		}
 		
 		if (input.isKeyDown(Input.KEY_SPACE)) {
-			// <<ShootType>>
+			if (!velocity.equals(new Vector2f(0.0f, 0.0f)) && canShoot) {
+				getParent().addChild((new Entity()).addComponent(new BulletComponent(getTransform().getRotation(), getShipTip())));
+				canShoot = false;
+			}
 		}
 	}
 	
 	@Override
 	public void handleUpdate(float delta) {
+		super.handleUpdate(delta);
 		getTransform().setPosition(getTransform().getPosition().add(velocity));
 		wrapAround();
+		lastShot += delta;
+		if (lastShot >= (60 * delta)) {
+			canShoot = true;
+			lastShot = 0.0f;
+		}
 	}
 	
 	@Override
 	public void handleRender(Graphics g) {
+		super.handleRender(g);
 		g.setColor(Color.WHITE);
-		Polygon2f shape = new Polygon2f();
-		float angle = getTransform().getRotation();
-		Vector2f position = getTransform().getPosition();
-		shape.addPoint((float) (position.getX() + 2 * 9.0 * Math.sin(angle)), (float) (position.getY() - 2 * 9.0 * Math.cos(angle)));
-		shape.addPoint((float) (position.getX() + 9.0 * Math.cos(angle) - 9.0 * Math.sin(angle)), (float) (position.getY() + 9.0 * Math.cos(angle) + 9.0 * Math.sin(angle)));
-		shape.addPoint((float) (position.getX() - 9.0 * Math.cos(angle) - 9.0 * Math.sin(angle)), (float) (position.getY() + 9.0 * Math.cos(angle) - 9.0 * Math.sin(angle)));
-		shape.render(g);
+		getShape().clear();
+		getShape().addPoint((float) (getTransform().getPosition().getX() + 2 * 9.0 * Math.sin(getTransform().getRotation())), 
+				(float) (getTransform().getPosition().getY() - 2 * 9.0 * Math.cos(getTransform().getRotation())));
+		getShape().addPoint((float) (getTransform().getPosition().getX() + 9.0 * Math.cos(getTransform().getRotation()) - 9.0 * Math.sin(getTransform().getRotation())), 
+				(float) (getTransform().getPosition().getY() + 9.0 * Math.cos(getTransform().getRotation()) + 9.0 * Math.sin(getTransform().getRotation())));
+		getShape().addPoint((float) (getTransform().getPosition().getX() - 9.0 * Math.cos(getTransform().getRotation()) - 9.0 * Math.sin(getTransform().getRotation())), 
+				(float) (getTransform().getPosition().getY() + 9.0 * Math.cos(getTransform().getRotation()) - 9.0 * Math.sin(getTransform().getRotation())));
+		getShape().renderPolygon(g);
+	}
+	
+	private Vector2f getShipTip() {
+		return new Vector2f((float) (getTransform().getPosition().getX() + 2 * 9.0 * Math.sin(getTransform().getRotation())), 
+							(float) (getTransform().getPosition().getY() - 2 * 9.0 * Math.cos(getTransform().getRotation())));
 	}
 	
 	private void wrapAround() {
