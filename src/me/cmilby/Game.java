@@ -53,4 +53,8 @@ public class Game extends JPanel {
 		
 		root.handleRender(g);
 	}
+	
+	public Entity getRoot() {
+		return this.root;
+	}
 }

@@ -7,6 +7,10 @@ public class Util {
 	private Util() {
 		// Prevents Instantiation
 	}
+
+	public static boolean isPointOffscreen(Vector2f point) {
+		return point.getX() < -50 || point.getX() > 650 || point.getY() < -50 || point.getY() > 650;
+	}
 	
 	public static Vector2f midpoint(Vector2f p1, Vector2f p2) {
 		return midpoint(p1.getX(), p1.getY(), p2.getX(), p2.getY());
@@ -54,6 +58,8 @@ public class Util {
 	}
 	
 	public static float minX(List<Vector2f> points) {
+		if (points.size() == 0)
+			return 0.0f;
 		float minX = points.get(0).getX();
 		for (int i = 1; i < points.size(); i++) 
 			if (points.get(i).getX() < minX)
@@ -62,6 +68,8 @@ public class Util {
 	}
 	
 	public static float minY(List<Vector2f> points) {
+		if (points.size() == 0)
+			return 0.0f;
 		float minY = points.get(0).getY();
 		for (int i = 1; i < points.size(); i++) 
 			if (points.get(i).getY() < minY)
@@ -70,6 +78,8 @@ public class Util {
 	}
 	
 	public static float maxX(List<Vector2f> points) {
+		if (points.size() == 0)
+			return 0.0f;
 		float maxX = points.get(0).getX();
 		for (int i = 1; i < points.size(); i++) 
 			if (points.get(i).getX() > maxX)
@@ -78,6 +88,8 @@ public class Util {
 	}
 	
 	public static float maxY(List<Vector2f> points) {
+		if (points.size() == 0)
+			return 0.0f;
 		float maxY = points.get(0).getY();
 		for (int i = 1; i < points.size(); i++) 
 			if (points.get(i).getY() > maxY)

@@ -10,10 +10,16 @@ public class AsteroidComponent extends EntityComponent {
 	
 	private int size;
 	private Vector2f velocity;
+	private Vector2f position;
 	 
 	public AsteroidComponent(int size) {
+		this(size, Util.getOffscreenPoint());
+	}
+	
+	public AsteroidComponent(int size, Vector2f position) {
 		super();
 		this.size = size;
+		this.position = position;
 		float angle = Util.getRandomNumber(-360, 360);
 		this.velocity = new Vector2f((float) Math.cos(Math.toRadians(angle)), (float) Math.sin(Math.toRadians(angle)));
 	}
@@ -21,7 +27,7 @@ public class AsteroidComponent extends EntityComponent {
 	@Override
 	public void setParent(Entity parent) {
 		super.setParent(parent);
-		getTransform().setPosition(Util.getOffscreenPoint());
+		getTransform().setPosition(position);
 		getTransform().setRotation((Math.random() > 0.5) ? (float) -(Math.random() / 2) : (float) (Math.random() / 2));
 		createAsteroid(size);
 	}

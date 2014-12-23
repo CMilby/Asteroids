@@ -66,6 +66,14 @@ public class Entity {
 			e.handleRender(g);
 	}
 	
+	public List<Entity> getAllChildren() {
+		return this.children;
+	}
+	
+	public List<EntityComponent> getAllComponents() {
+		return this.components;
+	}
+	
 	public Rectangle getBoundingBox() {
 		int minX = (int) Util.minX(shape.getPoints());
 		int minY = (int) Util.minY(shape.getPoints());
