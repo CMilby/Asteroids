@@ -8,59 +8,55 @@ public class AsteroidsGame extends Game {
 
 	public AsteroidsGame() {
 		super();
-		
 		setBackground(Color.BLACK);
 	}
 	
 	@Override
 	public void init() {
-		addEntity((new Entity()).addComponent(new ShipComponent()));
-	
+		addEntity(new ShipEntity());
 		for (int i = 0; i < 5; i++)
-			addEntity((new Entity()).addComponent(new AsteroidComponent(Util.getRandomNumber(1, 3))));	
+			addEntity(new AsteroidEntity(Util.getRandomNumber(1, 3)));	
 	}
 	
 	@Override
 	public void handleUpdate(float delta) {
 		super.handleUpdate(delta);
 		
-		/*for (Entity e : getRoot().getAllChildren()) {
-			for (EntityComponent comp : e.getAllComponents()) {
-				if (comp instanceof ShipComponent) {
-					for (Entity e1 : e.getAllChildren()) {
-						for (EntityComponent comp1 : e1.getAllComponents()) {
-							if (comp1 instanceof AsteroidComponent && comp.getParent().hasCollided(comp1.getParent())) {
-								System.out.println("Asteoroid to ship");
-							} else if (comp instanceof BulletComponent) {
-								System.out.println("Bullet");
-							}
-						}
-					}
-				} else if (comp instanceof BulletComponent) {
-					System.out.println("Bullet");
-					if (Util.isPointOffscreen(comp.getTransform().getPosition())) {
-						e.getAllComponents().remove(comp);
-						System.out.println("Removed Bullet");
-						break;
-					}
-					
-					for (Entity e1 : getRoot().getAllChildren()) {
-						for (EntityComponent comp1 : e1.getAllComponents()) {
-							if (comp1 instanceof AsteroidComponent && comp.getParent().hasCollided(comp1.getParent())) {
-								if (comp1.getShape().sides() <= 12) {
-									// Fragments
-								} else {
-									int num = Util.getRandomNumber(2, 3);
-									for (int i = 0; i < num; i++)
-										getRoot().addChild((new Entity()).addComponent(new AsteroidComponent((comp1.getShape().sides() <= 18) ? 1 : 2, comp1.getTransform().getPosition())));
-									e1.getAllComponents().remove(comp1);
-									e.getAllComponents().remove(comp);
-								}
-							}
-						}
-					}
+		// Ship To Asteroid Collision
+		Entity ship = getRoot().getAllChildren().get(0);
+		for (int i = 1; i < getRoot().getAllChildren().size(); i++) {
+			Entity collisionEntity = getRoot().getAllChildren().get(i);
+			if (collisionEntity instanceof AsteroidEntity) {
+				if (ship.hasCollided(collisionEntity)) 
+					reset();
+			}
+		}
+	
+		// Asteroid To Bullet Collision
+		for (int i = 1; i < getRoot().getAllChildren().size(); i++) {
+			Entity asteroid = getRoot().getAllChildren().get(i);
+			if (asteroid instanceof AsteroidEntity) {
+				for (int j = 0; j < ship.getAllChildren().size(); j++) {
+					if (asteroid.hasCollided(ship.getAllChildren().get(j))) 
+						handleBulletToAsteroid((AsteroidEntity) asteroid, (BulletEntity) ship.getAllChildren().get(j), ship);
 				}
 			}
-		}*/
+		}
+	}
+	
+	private void reset() {
+		getRoot().getAllChildren().clear();
+		addEntity(new ShipEntity());
+		for (int i = 0; i < 5; i++)
+			addEntity(new AsteroidEntity(Util.getRandomNumber(1, 3)));	
+	}
+	
+	private void handleBulletToAsteroid(AsteroidEntity asteroid, Entity bullet, Entity ship) {
+		getRoot().getAllChildren().remove(asteroid);
+		ship.getAllChildren().remove(bullet);
+		for (int i = 0; i < Util.getRandomNumber(1, 2); i++) 
+			addEntity(new AsteroidEntity(Util.getRandomNumber(1, 3)));
+		for (int i = 1; i < asteroid.getShape().sides(); i++)
+			addEntity(new FragmentEntity(asteroid.getShape().getPoint(i - 1), asteroid.getShape().getPoint(i), asteroid.getVelocity()));
 	}
 }

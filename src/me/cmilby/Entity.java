@@ -13,13 +13,11 @@ public class Entity {
 	private Polygon2f shape;
 	
 	private List<Entity> children;
-	private List<EntityComponent> components;
 	
 	public Entity() {
 		this.transform = new Transform();
 		this.shape = new Polygon2f();
 		children = new CopyOnWriteArrayList<Entity>();
-		components = new CopyOnWriteArrayList<EntityComponent>();
 	}
 	
 	public Entity addChild(Entity child) {
@@ -27,51 +25,23 @@ public class Entity {
 		return this;
 	}
 	
-	public Entity addComponent(EntityComponent component) {
-		component.setParent(this);
-		components.add(component);
-		return this;
-	}
-	
-	private void input(float delta) {
-		for (EntityComponent e : components) 
-			e.handleInput(delta);
-	}
-	
 	public void handleInput(float delta) {
-		input(delta);
 		for (Entity e : children)
 			e.handleInput(delta);
 	}
 	
-	private void update(float delta) {
-		for (EntityComponent e : components) 
-			e.handleUpdate(delta);
-	}
-	
 	public void handleUpdate(float delta) {
-		update(delta);
 		for (Entity e : children) 
 			e.handleUpdate(delta);
 	}
 	
-	private void render(Graphics g) {
-		for (EntityComponent e : components) 
-			e.handleRender(g);
-	}
-	
 	public void handleRender(Graphics g) {
-		render(g);
 		for (Entity e : children)
 			e.handleRender(g);
 	}
 	
 	public List<Entity> getAllChildren() {
 		return this.children;
-	}
-	
-	public List<EntityComponent> getAllComponents() {
-		return this.components;
 	}
 	
 	public Rectangle getBoundingBox() {

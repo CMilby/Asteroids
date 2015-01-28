@@ -3,22 +3,15 @@ package me.cmilby;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class BulletComponent extends EntityComponent {
+public class BulletEntity extends Entity {
 
 	public static final int BULLET_SIZE = 4;
 	
 	private Vector2f velocity;
-	private Vector2f position;
 	
-	public BulletComponent(float rotation, Vector2f position) {
+	public BulletEntity(float rotation, Vector2f position) {
 		super();
-		this.velocity = new Vector2f((float) Math.sin(rotation), (float) -Math.cos(rotation)); 
-		this.position = position;
-	}
-	
-	@Override
-	public void setParent(Entity parent) {
-		super.setParent(parent);
+		this.velocity = new Vector2f((float) Math.sin(rotation) * 1.5f, (float) -Math.cos(rotation) * 1.5f); 
 		getTransform().setPosition(position);
 	}
 	

@@ -7,6 +7,14 @@ public class Util {
 	private Util() {
 		// Prevents Instantiation
 	}
+	
+	public static int clamp(int value, int max, int min) {
+		if (value > max)
+			return max;
+		if (value < min)
+			return min;
+		return value;
+	}
 
 	public static boolean isPointOffscreen(Vector2f point) {
 		return point.getX() < -50 || point.getX() > 650 || point.getY() < -50 || point.getY() > 650;
@@ -18,6 +26,10 @@ public class Util {
 	
 	public static Vector2f midpoint(float x1, float y1, float x2, float y2) {
 		return new Vector2f((x2 + x1) / 2.0f, (y2 + y1) / 2.0f);
+	}
+	
+	public static float distance(Vector2f p1, Vector2f p2) {
+		return (float) Math.sqrt(Math.pow(p2.getX() - p1.getX(), 2) + Math.pow(p2.getY() - p1.getY(), 2));
 	}
 	
 	public static Vector2f rotate(double aC, double bC, double a, double b, double angle) {

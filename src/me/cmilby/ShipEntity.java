@@ -3,7 +3,7 @@ package me.cmilby;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class ShipComponent extends EntityComponent {
+public class ShipEntity extends Entity {
 	
 	private Input input;
 	private Vector2f velocity;
@@ -11,17 +11,12 @@ public class ShipComponent extends EntityComponent {
 	private boolean canShoot;
 	private float lastShot;
 	
-	public ShipComponent() {
+	public ShipEntity() {
 		super();
 		this.input = Input.getInstance();
 		this.velocity = new Vector2f();
 		this.canShoot = true;
 		this.lastShot = 0.0f;
-	}
-	
-	@Override
-	public void setParent(Entity parent) {
-		super.setParent(parent);
 		getTransform().setPosition(new Vector2f(300, 300));
 	}
 	
@@ -55,7 +50,7 @@ public class ShipComponent extends EntityComponent {
 		
 		if (input.isKeyDown(Input.KEY_SPACE)) {
 			if (!velocity.equals(new Vector2f(0.0f, 0.0f)) && canShoot) {
-				getParent().addChild((new Entity()).addComponent(new BulletComponent(getTransform().getRotation(), getShipTip())));
+				addChild(new BulletEntity(getTransform().getRotation(), getShipTip()));
 				canShoot = false;
 			}
 		}

@@ -3,30 +3,23 @@ package me.cmilby;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class AsteroidComponent extends EntityComponent {
+public class AsteroidEntity extends Entity {
 
 	public static final int MIN_COORD = -100;
 	public static final int MAX_COORD = 700;
 	
 	private int size;
 	private Vector2f velocity;
-	private Vector2f position;
 	 
-	public AsteroidComponent(int size) {
+	public AsteroidEntity(int size) {
 		this(size, Util.getOffscreenPoint());
 	}
 	
-	public AsteroidComponent(int size, Vector2f position) {
+	public AsteroidEntity(int size, Vector2f position) {
 		super();
 		this.size = size;
-		this.position = position;
 		float angle = Util.getRandomNumber(-360, 360);
 		this.velocity = new Vector2f((float) Math.cos(Math.toRadians(angle)), (float) Math.sin(Math.toRadians(angle)));
-	}
-	
-	@Override
-	public void setParent(Entity parent) {
-		super.setParent(parent);
 		getTransform().setPosition(position);
 		getTransform().setRotation((Math.random() > 0.5) ? (float) -(Math.random() / 2) : (float) (Math.random() / 2));
 		createAsteroid(size);
@@ -121,4 +114,12 @@ public class AsteroidComponent extends EntityComponent {
 			velocity = new Vector2f((float) Math.cos(Math.toRadians(angle)), (float) Math.sin(Math.toRadians(angle)));
 		}
 	}	
+	
+	public int getSize() {
+		return size;
+	}
+	
+	public Vector2f getVelocity() {
+		return velocity;
+	}
 }
