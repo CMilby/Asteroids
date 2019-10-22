@@ -5,6 +5,7 @@ import java.awt.Color;
 public class AsteroidsGame extends Game {
 
 	private static final long serialVersionUID = 1L;
+	private int lives = 3;
 
 	public AsteroidsGame() {
 		super();
@@ -37,8 +38,10 @@ public class AsteroidsGame extends Game {
 			Entity asteroid = getRoot().getAllChildren().get(i);
 			if (asteroid instanceof AsteroidEntity) {
 				for (int j = 0; j < ship.getAllChildren().size(); j++) {
-					if (asteroid.hasCollided(ship.getAllChildren().get(j))) 
+					if (asteroid.hasCollided(ship.getAllChildren().get(j))) {
 						handleBulletToAsteroid((AsteroidEntity) asteroid, (BulletEntity) ship.getAllChildren().get(j), ship);
+						ScoreKeeper.getInstance().addPoint(lives);
+					}
 				}
 			}
 		}
@@ -46,6 +49,11 @@ public class AsteroidsGame extends Game {
 	
 	private void reset() {
 		getRoot().getAllChildren().clear();
+		lives--;
+		ScoreKeeper.getInstance().updateLabel(lives);
+		if (lives <= 0) {
+			ScoreKeeper.getInstance().reset(lives);
+		}
 		addEntity(new ShipEntity());
 		for (int i = 0; i < 5; i++)
 			addEntity(new AsteroidEntity(Util.getRandomNumber(1, 3)));	
