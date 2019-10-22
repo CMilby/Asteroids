@@ -37,8 +37,10 @@ public class AsteroidsGame extends Game {
 			Entity asteroid = getRoot().getAllChildren().get(i);
 			if (asteroid instanceof AsteroidEntity) {
 				for (int j = 0; j < ship.getAllChildren().size(); j++) {
-					if (asteroid.hasCollided(ship.getAllChildren().get(j))) 
+					if (asteroid.hasCollided(ship.getAllChildren().get(j))) {
 						handleBulletToAsteroid((AsteroidEntity) asteroid, (BulletEntity) ship.getAllChildren().get(j), ship);
+						ScoreKeeper.getInstance().addPoint();
+					}
 				}
 			}
 		}
@@ -46,6 +48,7 @@ public class AsteroidsGame extends Game {
 	
 	private void reset() {
 		getRoot().getAllChildren().clear();
+		ScoreKeeper.getInstance().reset();
 		addEntity(new ShipEntity());
 		for (int i = 0; i < 5; i++)
 			addEntity(new AsteroidEntity(Util.getRandomNumber(1, 3)));	

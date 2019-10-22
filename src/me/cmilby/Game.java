@@ -3,6 +3,7 @@ package me.cmilby;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.TextField;
 
 import javax.swing.JPanel;
 
@@ -22,6 +23,7 @@ public class Game extends JPanel {
 		
 		setFocusable(true);
 		requestFocus();
+		this.add(ScoreKeeper.getInstance().scoreLabel);
 	}
 	
 	public void init() {
@@ -57,4 +59,5 @@ public class Game extends JPanel {
 	public Entity getRoot() {
 		return this.root;
 	}
+	
 }
