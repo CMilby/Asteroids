@@ -9,8 +9,8 @@ public class ScoreKeeper
     public TextField scoreLabel;
     
 	private ScoreKeeper() {
-		this.scoreLabel = new TextField("Score: " + score);
-		this.scoreLabel.setBounds(10, 10, 100, 50);
+		this.scoreLabel = new TextField("Score: " + score + ", Lives: 3");
+		this.scoreLabel.setBounds(10, 10, 500, 50);
 	} 
 	public static ScoreKeeper getInstance() 
 	{ 
@@ -20,17 +20,17 @@ public class ScoreKeeper
 		return instance; 
 	}
 	
-	public void addPoint() {
+	public void addPoint(int lives) {
 		score++;
-		this.updateLabel();
+		this.updateLabel(lives);
 	}
 	
-	public void reset() {
+	public void reset(int lives) {
 		score = 0;
-		this.updateLabel();
+		this.updateLabel(lives);
 	}
 	
-	private void updateLabel() {
-		this.scoreLabel.setText("Score: " + score);
+	public void updateLabel(int lives) {
+		this.scoreLabel.setText("Score: " + score + ", Lives: " + lives);
 	}
 } 
